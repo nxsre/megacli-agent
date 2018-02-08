@@ -83,7 +83,7 @@ func GetMegaCliLogicalDisk(Id string) models.MegaCliLogicalDisk {
 
 // GetMegaCliEnclosureDeviceId
 func GetMegaCliEnclosureDeviceId() (int, error) {
-	command := Megacli64 + "-EncInfo -a0"
+	command := Megacli64 + " -EncInfo -a0"
 	id := "32"
 	output := scraper.GetCommandOutput(command)
 	output = scraper.RemoveLineFeed(output)
