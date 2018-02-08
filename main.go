@@ -34,6 +34,6 @@ func main() {
 	e.GET("/megacli/physicaldisk/state/:disk", ctrl.MegaCliPhysicalDiskStateHandle)
 
 	// Start server
-	fmt.Println("megacli-agent " + agentVersion + " : starting server on :" + agentPort)
+	fmt.Println("megacli-agent " + agentVersion + " : starting server on :" + *host + ":" + *port)
 	e.Start(*host + ":" + *port)
 }
