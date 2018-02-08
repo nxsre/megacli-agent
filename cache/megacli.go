@@ -85,6 +85,10 @@ func GetMegaCliLogicalDisk(Id string) models.MegaCliLogicalDisk {
 // GetMegaCliEnclosureDeviceId
 func GetMegaCliEnclosureDeviceId() models.MegaCliEnclosureInfo {
 	enclosure := models.MegaCliEnclosureInfo{}
+	if err := ReleaseMegacli64(); err != nil {
+		fmt.Println("ReleaseMegacli64 failed: ", err)
+		return disk
+	}
 	command := Megacli64 + " -EncInfo -a0"
 	output := scraper.GetCommandOutput(command)
 	output = scraper.RemoveLineFeed(output)
