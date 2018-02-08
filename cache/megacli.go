@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
 	"strings"
@@ -89,6 +90,7 @@ func GetMegaCliEnclosureDeviceId() models.MegaCliEnclosureInfo {
 	output = scraper.RemoveLineFeed(output)
 	lines := scraper.SplitLines(output)
 	for _, line := range lines {
+		line = bytes.TrimSpace(line)
 		kv := strings.Split(string(line), ":")
 		value := strings.TrimSpace(kv[len(kv)-1])
 

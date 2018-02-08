@@ -17,7 +17,6 @@ type Cache struct {
 // New ..
 func New() *Cache {
 	c := &Cache{}
-	c.PopulateEnclosureInfo()
 	c.PopulateCache()
 	return c
 }
@@ -44,6 +43,7 @@ func (c *Cache) PopulateEnclosureInfo() {
 
 // PopulateCache ..
 func (c *Cache) PopulateCache() {
+	c.PopulateEnclosureInfo()
 	// can this be done in the constructor ?
 	c.MegaCliLogicalDisks = make(map[string]models.MegaCliLogicalDisk)
 	c.MegaCliPhysicalDisks = make(map[string]models.MegaCliPhysicalDisk)
