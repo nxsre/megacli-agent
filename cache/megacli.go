@@ -139,6 +139,12 @@ func GetMegaCliPhysicalDisk(EnclosureDeviceId, i int) models.MegaCliPhysicalDisk
 		} else if strings.HasPrefix(string(line), "Other Error Count: ") {
 			fmt.Println(diskLocation + " - " + string(line))
 			disk.OthErrCount = value
+		} else if strings.HasPrefix(string(line), "Predictive Failure Count: ") {
+			fmt.Println(diskLocation + " - " + string(line))
+			disk.PredictiveFailureCount = value
+		} else if strings.HasPrefix(string(line), "Last Predictive Failure Event Seq Number: ") {
+			fmt.Println(diskLocation + " - " + string(line))
+			disk.LastPredictiveFailureEventSeqNumber = value
 		} else if strings.HasPrefix(string(line), "PD Type: ") {
 			fmt.Println(diskLocation + " - " + string(line))
 			disk.PdType = value
