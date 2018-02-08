@@ -22,13 +22,13 @@ func main() {
 	e := echo.New()
 
 	// Routes
-	e.Get("/megacli/version", ctrl.VersionHandle)
-	e.Get("/megacli/logicaldisk/summary", ctrl.MegaCliLogicalDiskSummaryHandle)
-	e.Get("/megacli/logicaldisk/state/:disk", ctrl.MegaCliLogicalDiskStateHandle)
-	e.Get("/megacli/physicaldisk/summary", ctrl.MegaCliPhysicalDiskSummaryHandle)
-	e.Get("/megacli/physicaldisk/state/:disk", ctrl.MegaCliPhysicalDiskStateHandle)
+	e.GET("/megacli/version", ctrl.VersionHandle)
+	e.GET("/megacli/logicaldisk/summary", ctrl.MegaCliLogicalDiskSummaryHandle)
+	e.GET("/megacli/logicaldisk/state/:disk", ctrl.MegaCliLogicalDiskStateHandle)
+	e.GET("/megacli/physicaldisk/summary", ctrl.MegaCliPhysicalDiskSummaryHandle)
+	e.GET("/megacli/physicaldisk/state/:disk", ctrl.MegaCliPhysicalDiskStateHandle)
 
 	// Start server
 	fmt.Println("megacli-agent " + agentVersion + " : starting server on :" + agentPort)
-	e.Run(":" + agentPort)
+	e.Start(":" + agentPort)
 }
