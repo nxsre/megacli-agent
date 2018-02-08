@@ -5,15 +5,46 @@ import (
 	"strconv"
 	"strings"
 
+	"os"
+	"path/filepath"
+
 	"github.com/netopssh/agent-tools/models"
 	"github.com/netopssh/agent-tools/scraper"
 )
+
+const (
+	Megacli64 = "/opt/MegaRAID/MegaCli/MegaCli64"
+)
+
+func PathExist(_path string) bool {
+	_, err := os.Stat(_path)
+	if err != nil && os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
+func ReleaseMegacli64() error {
+	if PathExist(Megacli64) {
+		return nil
+	}
+	dir := filepath.Dir(Megacli64)
+	os.MkdirAll(dir, 0755)
+	if err := RestoreAsset(dir, "MegaCli64"); err != nil {
+		return err
+	}
+	return os.Chmod(Megacli64, 0777)
+}
 
 // GetMegaCliLogicalDisk ..
 func GetMegaCliLogicalDisk(Id string) models.MegaCliLogicalDisk {
 	var disk models.MegaCliLogicalDisk
 	diskLocation := "0"
-	command := "/opt/lsi/MegaCli64 -LDInfo -L" + Id + " -a0"
+	if err := ReleaseMegacli64(); err != nil {
+		fmt.Println("ReleaseMegacli64 failed: ", err)
+		return disk
+	}
+	command := Megacli64 + " -LDInfo -L" + Id + " -a0"
 
 	output := scraper.GetCommandOutput(command)
 	output = scraper.RemoveLineFeed(output)
@@ -55,8 +86,11 @@ func GetMegaCliPhysicalDisk(EnclosureDeviceId, i int) models.MegaCliPhysicalDisk
 
 	disk.EncDeviceId = EnclosureDeviceId
 	disk.SlotNumber = i
-
-	command := "/opt/lsi/MegaCli64 -PDInfo -PhysDrv " + diskLocation + " -a0"
+	if err := ReleaseMegacli64(); err != nil {
+		fmt.Println("ReleaseMegacli64 failed: ", err)
+		return disk
+	}
+	command := Megacli64 + " -PDInfo -PhysDrv " + diskLocation + " -a0"
 
 	output := scraper.GetCommandOutput(command)
 	output = scraper.RemoveLineFeed(output)
