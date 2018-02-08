@@ -1,6 +1,6 @@
 package main
 
-import "github.com/netopssh/megacli-agent/cache"
+import "github.com/soopsio/megacli-agent/cache"
 
 // Controller
 type Controller struct {
