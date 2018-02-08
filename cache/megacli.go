@@ -87,7 +87,7 @@ func GetMegaCliEnclosureDeviceId() models.MegaCliEnclosureInfo {
 	enclosure := models.MegaCliEnclosureInfo{}
 	if err := ReleaseMegacli64(); err != nil {
 		fmt.Println("ReleaseMegacli64 failed: ", err)
-		return disk
+		return enclosure
 	}
 	command := Megacli64 + " -EncInfo -a0"
 	output := scraper.GetCommandOutput(command)
