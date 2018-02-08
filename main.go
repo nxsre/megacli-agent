@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/labstack/echo"
-	"github.com/netopssh/megacli-agent/cache"
+	"github.com/soopsio/megacli-agent/cache"
 )
 
 const agentVersion = "0.1.151228"
