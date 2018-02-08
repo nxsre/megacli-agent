@@ -4,12 +4,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/netopssh/agent-tools/models"
+	"github.com/soopsio/agent-tools/models"
 )
 
 // Cache ..
 type Cache struct {
-	EnclosureDeviceId    int
+	MegaCliEnclosureInfo models.MegaCliEnclosureInfo
 	MegaCliLogicalDisks  map[string]models.MegaCliLogicalDisk
 	MegaCliPhysicalDisks map[string]models.MegaCliPhysicalDisk
 }
@@ -17,7 +17,7 @@ type Cache struct {
 // New ..
 func New() *Cache {
 	c := &Cache{}
-	c.PopulateEnclosureDeviceId()
+	c.PopulateEnclosureInfo()
 	c.PopulateCache()
 	return c
 }
@@ -36,8 +36,10 @@ func (c *Cache) Run() {
 }
 
 // EnclosureDeviceId
-func (c *Cache) PopulateEnclosureDeviceId() {
-	c.EnclosureDeviceId, _ = GetMegaCliEnclosureDeviceId()
+func (c *Cache) PopulateEnclosureInfo() {
+	c.MegaCliEnclosureInfo = models.MegaCliEnclosureInfo{}
+	enclosure := GetMegaCliEnclosureDeviceId()
+	c.MegaCliEnclosureInfo = enclosure
 }
 
 // PopulateCache ..
@@ -53,9 +55,11 @@ func (c *Cache) PopulateCache() {
 
 	// Physical Disks
 	i := 0
-	for i < 24 {
-		physicalDiskLocation := "[" + strconv.Itoa(c.EnclosureDeviceId) + ":" + strconv.Itoa(i) + "]"
-		disk := GetMegaCliPhysicalDisk(c.EnclosureDeviceId, i)
+	enclosureDeviceId, _ := strconv.Atoi(c.MegaCliEnclosureInfo.EnclosureDeviceId)
+	numOfDevices, _ := strconv.Atoi(c.MegaCliEnclosureInfo.NumberOfPhysicalDrives)
+	for i < numOfDevices {
+		physicalDiskLocation := "[" + strconv.Itoa(enclosureDeviceId) + ":" + strconv.Itoa(i) + "]"
+		disk := GetMegaCliPhysicalDisk(enclosureDeviceId, i)
 		c.MegaCliPhysicalDisks[physicalDiskLocation] = disk
 		i += 1
 	}

@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/netopssh/agent-tools/models"
-	"github.com/netopssh/agent-tools/scraper"
+	"github.com/soopsio/agent-tools/models"
+	"github.com/soopsio/agent-tools/scraper"
 )
 
 const (
@@ -82,9 +82,9 @@ func GetMegaCliLogicalDisk(Id string) models.MegaCliLogicalDisk {
 }
 
 // GetMegaCliEnclosureDeviceId
-func GetMegaCliEnclosureDeviceId() (int, error) {
+func GetMegaCliEnclosureDeviceId() models.MegaCliEnclosureInfo {
+	enclosure := models.MegaCliEnclosureInfo{}
 	command := Megacli64 + " -EncInfo -a0"
-	id := "32"
 	output := scraper.GetCommandOutput(command)
 	output = scraper.RemoveLineFeed(output)
 	lines := scraper.SplitLines(output)
@@ -93,14 +93,15 @@ func GetMegaCliEnclosureDeviceId() (int, error) {
 		value := strings.TrimSpace(kv[len(kv)-1])
 
 		if strings.HasPrefix(string(line), "Device ID ") {
-			id = value
-			break
+			enclosure.EnclosureDeviceId = value
+		} else if strings.HasPrefix(string(line), "Number of Physical Drives  ") {
+			enclosure.NumberOfPhysicalDrives = value
 		} else {
 			continue
 		}
 
 	}
-	return strconv.Atoi(id)
+	return enclosure
 }
 
 // GetMegaCliPhysicalDisk ..
