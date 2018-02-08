@@ -93,7 +93,6 @@ func GetMegaCliEnclosureDeviceId() (int, error) {
 		value := strings.TrimSpace(kv[len(kv)-1])
 
 		if strings.HasPrefix(string(line), "Device ID ") {
-			fmt.Println(diskLocation + " - " + string(line))
 			id = value
 			break
 		} else {
