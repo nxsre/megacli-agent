@@ -51,28 +51,30 @@ func GetMegaCliLogicalDisk(Id string) models.MegaCliLogicalDisk {
 	lines := scraper.SplitLines(output)
 
 	for _, line := range lines {
+		kv := strings.Split(string(line), ":")
+		value := strings.TrimSpace(kv[len(kv)-1])
 		// replace this with switch/case
 		if strings.HasPrefix(string(line), "Name ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.Name = string(line)
+			disk.Name = value
 		} else if strings.HasPrefix(string(line), "RAID Level ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.RaidLevel = string(line)
+			disk.RaidLevel = value
 		} else if strings.HasPrefix(string(line), "Size ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.Size = string(line)
+			disk.Size = value
 		} else if strings.HasPrefix(string(line), "Sector Size ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.SectorSize = string(line)
+			disk.SectorSize = value
 		} else if strings.HasPrefix(string(line), "State ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.State = string(line)
+			disk.State = value
 		} else if strings.HasPrefix(string(line), "Strip Size ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.StripSize = string(line)
+			disk.StripSize = value
 		} else if strings.HasPrefix(string(line), "Number Of Drives ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.NumberOfDrives = string(line)
+			disk.NumberOfDrives = value
 		}
 	}
 
@@ -97,42 +99,45 @@ func GetMegaCliPhysicalDisk(EnclosureDeviceId, i int) models.MegaCliPhysicalDisk
 	lines := scraper.SplitLines(output)
 
 	for _, line := range lines {
+		kv := strings.Split(string(line), ":")
+		value := strings.TrimSpace(kv[len(kv)-1])
+
 		// replace this with switch/case
 		if strings.HasSuffix(string(line), " is not found.") {
 			break
 		} else if strings.HasPrefix(string(line), "WWN: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.Wwn = string(line)
+			disk.Wwn = value
 		} else if strings.HasPrefix(string(line), "Media Error Count: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.MedErrCount = string(line)
+			disk.MedErrCount = value
 		} else if strings.HasPrefix(string(line), "Other Error Count: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.OthErrCount = string(line)
+			disk.OthErrCount = value
 		} else if strings.HasPrefix(string(line), "PD Type: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.PdType = string(line)
+			disk.PdType = value
 		} else if strings.HasPrefix(string(line), "Raw Size: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.RawSize = string(line)
+			disk.RawSize = value
 		} else if strings.HasPrefix(string(line), "Firmware state: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.FirmwareState = string(line)
+			disk.FirmwareState = value
 		} else if strings.HasPrefix(string(line), "Inquiry Data: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.InquiryData = string(line)
+			disk.InquiryData = value
 		} else if strings.HasPrefix(string(line), "Device Speed: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.DeviceSpeed = string(line)
+			disk.DeviceSpeed = value
 		} else if strings.HasPrefix(string(line), "Link Speed: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.LinkSpeed = string(line)
+			disk.LinkSpeed = value
 		} else if strings.HasPrefix(string(line), "Media Type: ") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.MediaType = string(line)
+			disk.MediaType = value
 		} else if strings.HasPrefix(string(line), "Drive Temperature") {
 			fmt.Println(diskLocation + " - " + string(line))
-			disk.DriveTemp = string(line)
+			disk.DriveTemp = value
 		}
 	}
 
