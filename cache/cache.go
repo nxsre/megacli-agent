@@ -7,10 +7,9 @@ import (
 	"github.com/netopssh/agent-tools/models"
 )
 
-const EnclosureDeviceId = 8
-
 // Cache ..
 type Cache struct {
+	EnclosureDeviceId    int
 	MegaCliLogicalDisks  map[string]models.MegaCliLogicalDisk
 	MegaCliPhysicalDisks map[string]models.MegaCliPhysicalDisk
 }
@@ -18,6 +17,7 @@ type Cache struct {
 // New ..
 func New() *Cache {
 	c := &Cache{}
+	c.PopulateEnclosureDeviceId()
 	c.PopulateCache()
 	return c
 }
@@ -35,6 +35,11 @@ func (c *Cache) Run() {
 	}()
 }
 
+// EnclosureDeviceId
+func (c *Cache) PopulateEnclosureDeviceId() {
+	c.EnclosureDeviceId, _ = GetMegaCliEnclosureDeviceId()
+}
+
 // PopulateCache ..
 func (c *Cache) PopulateCache() {
 	// can this be done in the constructor ?
@@ -49,8 +54,8 @@ func (c *Cache) PopulateCache() {
 	// Physical Disks
 	i := 0
 	for i < 24 {
-		physicalDiskLocation := "[" + strconv.Itoa(EnclosureDeviceId) + ":" + strconv.Itoa(i) + "]"
-		disk := GetMegaCliPhysicalDisk(EnclosureDeviceId, i)
+		physicalDiskLocation := "[" + strconv.Itoa(c.EnclosureDeviceId) + ":" + strconv.Itoa(i) + "]"
+		disk := GetMegaCliPhysicalDisk(c.EnclosureDeviceId, i)
 		c.MegaCliPhysicalDisks[physicalDiskLocation] = disk
 		i += 1
 	}

@@ -81,6 +81,29 @@ func GetMegaCliLogicalDisk(Id string) models.MegaCliLogicalDisk {
 	return disk
 }
 
+// GetMegaCliEnclosureDeviceId
+func GetMegaCliEnclosureDeviceId() (int, error) {
+	command := Megacli64 + "-EncInfo -a0"
+	id := "32"
+	output := scraper.GetCommandOutput(command)
+	output = scraper.RemoveLineFeed(output)
+	lines := scraper.SplitLines(output)
+	for _, line := range lines {
+		kv := strings.Split(string(line), ":")
+		value := strings.TrimSpace(kv[len(kv)-1])
+
+		if strings.HasPrefix(string(line), "Device ID ") {
+			fmt.Println(diskLocation + " - " + string(line))
+			id = value
+			break
+		} else {
+			continue
+		}
+
+	}
+	return strconv.Atoi(id)
+}
+
 // GetMegaCliPhysicalDisk ..
 func GetMegaCliPhysicalDisk(EnclosureDeviceId, i int) models.MegaCliPhysicalDisk {
 	var disk models.MegaCliPhysicalDisk
